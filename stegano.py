@@ -1,3 +1,5 @@
+# Author: Pedro Bernini. 2020.
+
 import requests
 import sys
 import clipboard
@@ -15,7 +17,7 @@ def encode(publicMessage, privateMessage):
     response = requests.get(url)
     if response.status_code == 200:
         clipboard.copy(response.content.decode('utf-8'))
-        print('Mensagem esteganografada pronta na área de transferência!')
+        print('Steganography message ready on clipboard!')
     else:
         print('API Bad Request!')
 
@@ -24,31 +26,29 @@ def decode(publicMessage):
     response = requests.get(url)
     if response.status_code == 200:
         clipboard.copy(response.content.decode('utf-8'))
-        print('Mensagem desteganografada pronta na área de transferência!')
+        print('Unsteganography message ready on clipboard!')
     else:
         print('API Bad Request!')
 
 def showCommands():
-    print('Para esteganografar: $ python stegano.py encode "<mensagem publica>" "<mensagem privada>"')
-    print('Para destaganografar: $ python stegano.py decode "<mensagem publica>"')
+    print('Invalid command!')
+    print('For Steganography: $ python stegano.py --encode "<public message>" "<private message>"')
+    print('For Unsteganography: $ python stegano.py --decode "<public message>"')
 
 try:
     if checkApi():
         try:
-            if sys.argv[1] == 'encode':
+            if sys.argv[1] == '--encode':
                 encode(sys.argv[2], sys.argv[3])
-            elif sys.argv[1] == 'decode':
+            elif sys.argv[1] == '--decode':
                 decode(sys.argv[2])
             else:
-                print('Comando inválido!')
                 showCommands()
         except IndexError:
-            print('Parâmetros inválidos!')
             showCommands()
     else:
-        print('Problemas com a API. Tente mais tarde!')
+        print('API Error. Try later!')
 except:
-    print('Comando inválido!')
     showCommands()
 
 
