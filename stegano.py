@@ -16,7 +16,10 @@ def encode(publicMessage, privateMessage):
     url = API + '?public=' + publicMessage.replace(' ', '+') + '&private=' + privateMessage.replace(' ', '+')
     response = requests.get(url)
     if response.status_code == 200:
-        clipboard.copy(response.content.decode('utf-8'))
+        try:
+            clipboard.copy(response.content.decode('utf-8'))
+        except:
+            print('Error clipboard message!')
         print('Steganography message ready on clipboard!')
     else:
         print('API Bad Request!')
@@ -25,7 +28,12 @@ def decode(publicMessage):
     url = API + '?decode=' + publicMessage.replace(' ', '+')
     response = requests.get(url)
     if response.status_code == 200:
-        clipboard.copy(response.content.decode('utf-8'))
+        import pdb
+        pdb.set_trace()
+        try:
+            clipboard.copy(response.content.decode('utf-8').replace('\x00', ''))
+        except:
+            print('Error clipboard message!')
         print('Unsteganography message ready on clipboard!')
     else:
         print('API Bad Request!')
